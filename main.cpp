@@ -1,8 +1,8 @@
 
-#include "Cone.h"
+#include "ChildrenSlide.h"
 
 int main(int argc, char** argv)
 {
-	Cone::main(argc, argv);
+	ChildrenSlide::main(argc, argv);
 	return 0;
 }
