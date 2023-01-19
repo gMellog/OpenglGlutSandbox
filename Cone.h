@@ -132,7 +132,7 @@ namespace Cone
 			"Interaction:\n"
 			"1. Press ` (it's left up button close to ESC)\n"
 			"2. Follow to prompted instructions\n"
-			"3. Finally you'll get cross-section ring respective your response\n";
+			"3. Finally you'll get cone respective your response\n";
 	}
 	// Main routine.
 	int main(int argc, char** argv)
