@@ -2,7 +2,7 @@
 ///////////////////////////////////////////////////////         
 // crossSectionRing.h
 //
-// This program draws 3D cross-section ring with user 
+// This program draws 3D cone with user 
 // defined amount of sides.
 // 
 // Sides could be set by the user with terminal where 
@@ -18,13 +18,17 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-namespace CrossSectionRing
+namespace Cone
 {
 	static int N;
 
 	// Drawing routine.
 	void drawScene(void)
 	{
+		const float X = 0.f;
+		const float Y = 10.f;
+		const float Z = -20.f;
+
 		float R = 20.0;
 		float t;
 
@@ -32,14 +36,14 @@ namespace CrossSectionRing
 		glColor3f(0.0, 0.0, 0.0);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glBegin(GL_TRIANGLE_STRIP);
+		glBegin(GL_TRIANGLE_FAN);
 
+		glVertex3f(X, Y, Z);
 		for (int i = 0; i <= N; ++i)
 		{
 			t = (2 * M_PI * i / N);
 
-			glVertex3f(20, R * sin(t), -75 + R * cos(t));
-			glVertex3f(50,   R * sin(t), -75 + R * cos(t));
+			glVertex3f(X + R * cos(t), -20.f, -50.f + R * sin(t));
 		}
 
 		glEnd();
@@ -142,7 +146,7 @@ namespace CrossSectionRing
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);
-		glutCreateWindow("crossSectionRing");
+		glutCreateWindow("cone");
 		glutDisplayFunc(drawScene);
 		glutReshapeFunc(resize);
 		glutKeyboardFunc(keyInput);

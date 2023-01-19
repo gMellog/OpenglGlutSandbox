@@ -1,8 +1,8 @@
 
-#include "CrossSectionRing.h"
+#include "Cone.h"
 
 int main(int argc, char** argv)
 {
-	CrossSectionRing::main(argc, argv);
+	Cone::main(argc, argv);
 	return 0;
 }
