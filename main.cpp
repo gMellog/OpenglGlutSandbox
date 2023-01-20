@@ -1,8 +1,8 @@
 
-#include "Projects/CrossSectionRing.h"
+#include "Projects/MoonDrawings.h"
 
 int main(int argc, char** argv)
 {
-	CrossSectionRing::main(argc, argv);
+	MoonDrawings::main(argc, argv);
 	return 0;
 }

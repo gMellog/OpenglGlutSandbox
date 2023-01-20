@@ -317,8 +317,6 @@ namespace MoonDrawings
 
 	void drawCrescentWord(GLfloat X, GLfloat Y)
 	{
-		glColor3d(0.8, 0.0, 0.0);
-
 		drawC(X, Y, 1.5f, 3.f);
 		drawR(X + 2.5f, Y - 1.5f, 3.f, 3.f);
 		drawE(X + 5.5f, Y - 0.2f, 3.f, 3.f);
@@ -352,6 +350,18 @@ namespace MoonDrawings
 		drawT(X + 29.f, Y, 1.5f, 3.f);
 		drawE(X + 32.f, Y - 1.5f, 3.f, 3.f);
 		drawR(X + 35.f, Y - 3.f, 3.f, 3.f);
+	}
+
+	void drawUpWords()
+	{
+		if (!isWire)
+			glColor3d(0.8, 0.0, 0.0);
+		else
+			glColor3d(0.0, 1.0, 0.0);
+
+		drawCrescentWord(4.f, 73.25f);
+		drawHalfWord(40.f, 71.5f);
+		drawThreeQuarterWord(60.f, 75.f);
 	}
 
 	void drawMoonWord(GLfloat X, GLfloat Y)
@@ -436,10 +446,8 @@ namespace MoonDrawings
 		drawHalfMoon(53.0f, 50.f);
 		drawThreeQuarterMoon(86.0f, 50.f);
 
+		drawUpWords();
 		drawMoonWord(35.f, 14.f);
-		drawCrescentWord(4.f, 73.25f);
-		drawHalfWord(40.f, 71.5f);
-		drawThreeQuarterWord(60.f, 75.f);
 
 		glFlush();
 	}
