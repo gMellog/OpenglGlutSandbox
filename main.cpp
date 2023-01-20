@@ -1,8 +1,8 @@
 
-#include "ChildrenSlide.h"
+#include "Projects/CrossSectionRing.h"
 
 int main(int argc, char** argv)
 {
-	ChildrenSlide::main(argc, argv);
+	CrossSectionRing::main(argc, argv);
 	return 0;
 }
