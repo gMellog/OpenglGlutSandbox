@@ -1,8 +1,8 @@
 
-#include "Sphere.h"
+#include "Projects/CrossSectionRing.h"
 
 int main(int argc, char** argv)
 {
-	Sphere::main(argc, argv);
+	CrossSectionRing::main(argc, argv);
 	return 0;
 }

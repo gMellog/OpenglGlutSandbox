@@ -20,11 +20,19 @@
 
 namespace CrossSectionRing
 {
-	static int N;
-
+	static int N = 3;
+	static int XAngle, YAngle = 55, ZAngle;
+	static int rotateAngle = 5;
 	// Drawing routine.
 	void drawScene(void)
 	{
+		glLoadIdentity();
+
+		glTranslatef(35.f, 0.f, -30.f);
+		glRotatef(XAngle, 1.f, 0.f, 0.f);
+		glRotatef(YAngle, 0.f, 1.f, 0.f);
+		glRotatef(ZAngle, 0.f, 0.f, 1.f);
+
 		float R = 20.0;
 		float t;
 
@@ -38,8 +46,10 @@ namespace CrossSectionRing
 		{
 			t = (2 * M_PI * i / N);
 
-			glVertex3f(20, R * sin(t), -75 + R * cos(t));
-			glVertex3f(50,   R * sin(t), -75 + R * cos(t));
+			//glVertex3f(20, R * sin(t), -75 + R * cos(t));
+			//glVertex3f(50,   R * sin(t), -75 + R * cos(t));
+			glVertex3f(R * cos(t), R * sin(t), -30.f);
+			glVertex3f(R * cos(t), R * sin(t), -50.f);
 		}
 
 		glEnd();
@@ -115,6 +125,39 @@ namespace CrossSectionRing
 			break;
 		case '`':
 			promptSides();
+			glutPostRedisplay();
+			break;
+		case 'x':
+			XAngle += rotateAngle;
+			if (XAngle > 360)
+				XAngle -= -360;
+			glutPostRedisplay();
+			break;
+		case 'X':
+			if (XAngle >= rotateAngle)
+				XAngle -= rotateAngle;
+			glutPostRedisplay();
+			break;
+		case 'y':
+			YAngle += rotateAngle;
+			if (YAngle >= 360)
+				YAngle -= 360;
+			glutPostRedisplay();
+			break;
+		case 'Y':
+			if (YAngle >= rotateAngle)
+				YAngle -= rotateAngle;
+			glutPostRedisplay();
+
+		case 'z':
+			ZAngle += rotateAngle;
+			if (ZAngle >= 360)
+				ZAngle -= 360;
+			glutPostRedisplay();
+			break;
+		case 'Z':
+			if (ZAngle >= rotateAngle)
+				ZAngle -= rotateAngle;
 			glutPostRedisplay();
 			break;
 		default:
