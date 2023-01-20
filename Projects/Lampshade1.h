@@ -1,12 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////          
-//
-// This program approximates a sphere with triangle strips.
+// This program draws lampshade1
 //
 // Interaction:
-// Press P/p to increase/decrease the number of longitudinal slices.
-// Press Q/q to increase/decrease the number of latitudinal slices.
-// Press x, X, y, Y, z, Z to turn the sphere.
-//
+// Press x, X, y, Y, z, Z to turn the lampshade.
 /////////////////////////////////////////////////////////////////////////////////////// 
 
 #define _USE_MATH_DEFINES 
@@ -16,11 +12,8 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-namespace Sphere
+namespace Lampshade1
 {
-	static float R = 5.0;
-	static int p = 6; // Number of longitudinal slices.
-	static int q = 4; // Number of latitudinal slices.
 	static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
 
 	// Initialization routine.
@@ -32,13 +25,11 @@ namespace Sphere
 	// Drawing routine.
 	void drawScene(void)
 	{
-		int  i, j;
-
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
 
-		glTranslatef(0.0, 0.0, -10.0);
+		glTranslatef(0.0, -20.0, 15.0);
 
 		glRotatef(Zangle, 0.0, 0.0, 1.0);
 		glRotatef(Yangle, 0.0, 1.0, 0.0);
@@ -47,24 +38,28 @@ namespace Sphere
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
 
-		for (j = -q; j < q; j++)
-		{
-			// One latitudinal triangle strip.
-			glBegin(GL_TRIANGLE_STRIP);
-			for (i = 0; i <= p; i++)
-			{
-				auto fi = M_PI_2 * (j + 1) / q;
-				const auto th = 2.0 * i / p  * M_PI;
+		glBegin(GL_TRIANGLE_STRIP);
 
-				glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
+		glVertex3f(0.f, 0.f, -80.f);
+		glVertex3f(0.f, 0.f, -50.f);
+		glVertex3f(30.f, 0.f, -80.f);
+		glVertex3f(30.f, 0.f, -50.f);
 
-				fi = M_PI_2 * j / q;
+		glVertex3f(30.f, 0.f, -50.f);
+		glVertex3f(30.f, 15.f, -50.f);
+		glVertex3f(30.f, 0.f, -80.f);
+		glVertex3f(30.f, 15.f, -80.f);
+		glVertex3f(0.f, 0.f, -80.f);
+		glVertex3f(0.f, 15.f, -80.f);
+		glVertex3f(0.f, 0.f, -50.f);
+		glVertex3f(0.f, 15.f, -50.f);
 
-				glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
+		glVertex3f(0.f, 15.f, -50.f);
+		glVertex3f(0.f, 15.f, -80.f);
+		glVertex3f(30.f, 15.f, -50.f);
+		glVertex3f(30.f, 15.f, -80.f);
 
-			}
-			glEnd();
-		}
+		glEnd();
 
 		glFlush();
 	}
@@ -86,22 +81,6 @@ namespace Sphere
 		{
 		case 27:
 			exit(0);
-			break;
-		case 'P':
-			p += 1;
-			glutPostRedisplay();
-			break;
-		case 'p':
-			if (p > 3) p -= 1;
-			glutPostRedisplay();
-			break;
-		case 'Q':
-			q += 1;
-			glutPostRedisplay();
-			break;
-		case 'q':
-			if (q > 3) q -= 1;
-			glutPostRedisplay();
 			break;
 		case 'x':
 			Xangle += 5.0;
@@ -141,10 +120,8 @@ namespace Sphere
 	// Routine to output interaction instructions to the C++ window.
 	void printInteraction(void)
 	{
-		std::cout << "Interaction:" << std::endl;
-		std::cout << "Press P/p to increase/decrease the number of longitudinal slices." << std::endl
-			<< "Press Q/q to increase/decrease the number of latitudinal slices." << std::endl
-			<< "Press x, X, y, Y, z, Z to turn the hemisphere." << std::endl;
+		std::cout << "Interaction:\n";
+		std::cout << "Press x, X, y, Y, z, Z to turn the lampshade" << std::endl;
 	}
 
 	// Main routine.
@@ -159,7 +136,7 @@ namespace Sphere
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);
-		glutCreateWindow("Sphere.cpp");
+		glutCreateWindow("Lampshade1");
 		glutDisplayFunc(drawScene);
 		glutReshapeFunc(resize);
 		glutKeyboardFunc(keyInput);
@@ -170,8 +147,8 @@ namespace Sphere
 		setup();
 
 		glutMainLoop();
-		
+
 		return 0;
 	}
-
 }
+
