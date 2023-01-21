@@ -23,10 +23,41 @@ namespace Sphere
 	static int p = 6; // Number of longitudinal slices.
 	static int q = 4; // Number of latitudinal slices.
 	static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
+	static std::vector<float> vertices;
+
+	void clearVertices()
+	{
+		vertices.erase(std::begin(vertices), std::end(vertices));
+	}
+
+	void fillVertices()
+	{
+		int j, i;
+		for (j = -q; j < q; j++)
+		{
+			for (i = 0; i <= p; i++)
+			{
+				auto fi = M_PI_2 * (j + 1) / q;
+				const auto th = 2.0 * i / p * M_PI;
+
+				vertices.push_back(R * cos(fi) * cos(th));
+				vertices.push_back(R * sin(fi));
+				vertices.push_back(-R * cos(fi) * sin(th));
+
+				fi = M_PI_2 * j / q;
+
+				vertices.push_back(R * cos(fi) * cos(th));
+				vertices.push_back(R * sin(fi));
+				vertices.push_back(-R * cos(fi) * sin(th));
+
+			}
+		}
+	}
 
 	// Initialization routine.
 	void setup(void)
 	{
+		fillVertices();
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 		glEnableClientState(GL_VERTEX_ARRAY);
 	}
@@ -48,6 +79,7 @@ namespace Sphere
 		glColor3f(0.0, 0.0, 0.0);
 		
 		/* One way
+		int j, i;
 		for (j = -q; j < q; j++)
 		{
 			// One latitudinal triangle strip.
@@ -68,39 +100,46 @@ namespace Sphere
 		}
 		*/
 		
-		//Another way
+		/*Another way
 		int j, i, index; 
 		for (j = -q; j < q; j++)
 		{
-			std::vector<float> verticies;
-			verticies.reserve((p + 1) * 3);
+			std::vector<float> vertices;
+			vertices.reserve((p + 1) * 3);
 
-			std::vector<unsigned int> indecies;
-			indecies.reserve(p + 1);
+			std::vector<unsigned int> indices;
+			indices.reserve(p + 1);
 
 			for (i = 0, index = 0; i <= p; i++, index += 2)
 			{
 				auto fi = M_PI_2 * (j + 1) / q;
 				const auto th = 2.0 * i / p * M_PI;
 
-				verticies.push_back(R * cos(fi) * cos(th));
-				verticies.push_back(R * sin(fi));
-				verticies.push_back(-R * cos(fi) * sin(th));
+				vertices.push_back(R * cos(fi) * cos(th));
+				vertices.push_back(R * sin(fi));
+				vertices.push_back(-R * cos(fi) * sin(th));
 
-				indecies.push_back(index);
+				indices.push_back(index);
 
 				fi = M_PI_2 * j / q;
 
-				verticies.push_back(R * cos(fi) * cos(th));
-				verticies.push_back(R * sin(fi));
-				verticies.push_back(-R * cos(fi) * sin(th));
+				vertices.push_back(R * cos(fi) * cos(th));
+				vertices.push_back(R * sin(fi));
+				vertices.push_back(-R * cos(fi) * sin(th));
 
-				indecies.push_back(index + 1);
+				indices.push_back(index + 1);
 			}
 
-			glVertexPointer(3, GL_FLOAT, 0, verticies.data());
-			glDrawElements(GL_TRIANGLE_STRIP, indecies.size(), GL_UNSIGNED_INT, indecies.data());
+			glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+			glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, indices.data());
 		}
+		*/
+
+		
+		//Another another way, actually the most effective
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size() / 3);
+		
 
 		glFlush();
 	}
@@ -125,19 +164,33 @@ namespace Sphere
 			break;
 		case 'P':
 			p += 1;
+			clearVertices();
+			fillVertices();
 			glutPostRedisplay();
 			break;
 		case 'p':
-			if (p > 3) p -= 1;
-			glutPostRedisplay();
+			if (p > 3)
+			{
+				p -= 1;
+				clearVertices();
+				fillVertices();
+				glutPostRedisplay();
+			}
 			break;
 		case 'Q':
 			q += 1;
+			clearVertices();
+			fillVertices();
 			glutPostRedisplay();
 			break;
 		case 'q':
-			if (q > 3) q -= 1;
-			glutPostRedisplay();
+			if (q > 3) 
+			{
+				q -= 1;
+				clearVertices();
+				fillVertices();
+				glutPostRedisplay();
+			}
 			break;
 		case 'x':
 			Xangle += 5.0;
@@ -180,7 +233,7 @@ namespace Sphere
 		std::cout << "Interaction:" << std::endl;
 		std::cout << "Press P/p to increase/decrease the number of longitudinal slices." << std::endl
 			<< "Press Q/q to increase/decrease the number of latitudinal slices." << std::endl
-			<< "Press x, X, y, Y, z, Z to turn the hemisphere." << std::endl;
+			<< "Press x, X, y, Y, z, Z to turn the Sphere." << std::endl;
 	}
 
 	// Main routine.
@@ -195,7 +248,7 @@ namespace Sphere
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);
-		glutCreateWindow("Sphere.cpp");
+		glutCreateWindow("Sphere");
 		glutDisplayFunc(drawScene);
 		glutReshapeFunc(resize);
 		glutKeyboardFunc(keyInput);

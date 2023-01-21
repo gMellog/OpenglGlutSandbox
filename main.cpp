@@ -1,8 +1,8 @@
 
-#include "Circle.h"
+#include "Projects/Sphere.h"
 
 int main(int argc, char** argv)
 {
-	Circle::main(argc, argv);
+	Sphere::main(argc, argv);
 	return 0;
 }
