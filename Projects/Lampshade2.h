@@ -11,6 +11,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <vector>
 
 namespace Lampshade2
 {
@@ -19,9 +20,43 @@ namespace Lampshade2
 	static float R1 = 12.5f;
 	static int N = 15;
 
+	static std::vector<float> vertices;
+	static std::vector<unsigned int> indices;
+
+	void fillVertices()
+	{
+		vertices.reserve((N + 1) * 2);
+
+		float t;
+		for (int i = 0; i <= N; ++i)
+		{
+			t = 2 * M_PI * i / N;
+
+			vertices.push_back(R0 * cos(t));
+			vertices.push_back(0.f);
+			vertices.push_back(R0 * sin(t));
+
+			vertices.push_back(R1 * cos(t));
+			vertices.push_back(10.f);
+			vertices.push_back(R1 * sin(t));
+		}
+	}
+
+	void fillIndices()
+	{
+		const auto reserveCap = (N + 1) * 2;
+		indices.reserve(reserveCap);
+		for (int i = 0; i < reserveCap; ++i)
+			indices.push_back(i);
+	}
+
 	// Initialization routine.
 	void setup(void)
 	{
+		fillVertices();
+		fillIndices();
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
@@ -41,18 +76,7 @@ namespace Lampshade2
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
 
-		glBegin(GL_TRIANGLE_STRIP);
-
-		float t;
-		for (int i = 0; i <= N; ++i)
-		{
-			t = 2 * M_PI * i / N;
-
-			glVertex3f(R0 * cos(t), 0.f, R0 * sin(t));
-			glVertex3f(R1 * cos(t), 10.f, R1 * sin(t));
-		}
-
-		glEnd();
+		glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, indices.data());
 
 		glFlush();
 	}
