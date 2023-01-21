@@ -11,11 +11,40 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-
+#include <vector>
 
 namespace SpiralBand
 {
-	static float Xangle = 50.0, Yangle = 0.0, Zangle = 0.0;
+	static float Xangle = 50.f, Yangle = 0.f, Zangle = 0.f;
+	static float R = 20.f;
+	static std::vector<float> vertices;
+	static std::vector<unsigned int> indices;
+
+	void fillVertices()
+	{
+		float t;
+		for (t = -10 * M_PI; t <= 10 * M_PI; t += M_PI / 20.0)
+		{
+			vertices.push_back(R * cos(t));
+			vertices.push_back(R * sin(t));
+			vertices.push_back(t - 60.0);
+
+			vertices.push_back(R * cos(t));
+			vertices.push_back(R * sin(t));
+			vertices.push_back(t - 55.0);
+		}
+	}
+
+	void fillIndices()
+	{
+		float t;
+		int k;
+		for (k = 0,t = -10 * M_PI; t <= 10 * M_PI; t += M_PI / 20.0)
+		{
+			indices.push_back(++k);
+			indices.push_back(++k);
+		}
+	}
 
 	// Drawing routine.
 	void drawScene(void)
@@ -28,22 +57,11 @@ namespace SpiralBand
 		glRotatef(Yangle, 0.0, 1.0, 0.0);
 		glRotatef(Xangle, 1.0, 0.0, 0.0);
 
-		float R = 20.0;
-	
-		float t;
-
 		glClear(GL_COLOR_BUFFER_BIT);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
 
-		glBegin(GL_TRIANGLE_STRIP);
-		for (t = -10 * M_PI; t <= 10 * M_PI; t += M_PI / 20.0)
-		{
-			glVertex3f(R * cos(t), R * sin(t), t - 60.0);
-			glVertex3f(R * cos(t), R * sin(t), t - 55.0);
-		}
-
-		glEnd();
+		glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, indices.data());
 
 		glFlush();
 	}
@@ -51,6 +69,10 @@ namespace SpiralBand
 	// Initialization routine.
 	void setup(void)
 	{
+		fillVertices();
+		fillIndices();
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
