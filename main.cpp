@@ -1,8 +1,8 @@
 
-#include "Projects/RugbyFootball.h"
+#include "BullSEye.h"
 
 int main(int argc, char** argv)
 {
-	RugbyFootball::main(argc, argv);
+	BullSEye::main(argc, argv);
 	return 0;
 }
