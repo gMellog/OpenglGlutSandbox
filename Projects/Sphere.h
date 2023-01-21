@@ -12,6 +12,7 @@
 #define _USE_MATH_DEFINES 
 
 #include <cmath>
+#include <vector>
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -27,13 +28,12 @@ namespace Sphere
 	void setup(void)
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
+		glEnableClientState(GL_VERTEX_ARRAY);
 	}
 
 	// Drawing routine.
 	void drawScene(void)
 	{
-		int  i, j;
-
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
@@ -46,7 +46,8 @@ namespace Sphere
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
-
+		
+		/* One way
 		for (j = -q; j < q; j++)
 		{
 			// One latitudinal triangle strip.
@@ -64,6 +65,41 @@ namespace Sphere
 
 			}
 			glEnd();
+		}
+		*/
+		
+		//Another way
+		int j, i, index; 
+		for (j = -q; j < q; j++)
+		{
+			std::vector<float> verticies;
+			verticies.reserve((p + 1) * 3);
+
+			std::vector<unsigned int> indecies;
+			indecies.reserve(p + 1);
+
+			for (i = 0, index = 0; i <= p; i++, index += 2)
+			{
+				auto fi = M_PI_2 * (j + 1) / q;
+				const auto th = 2.0 * i / p * M_PI;
+
+				verticies.push_back(R * cos(fi) * cos(th));
+				verticies.push_back(R * sin(fi));
+				verticies.push_back(-R * cos(fi) * sin(th));
+
+				indecies.push_back(index);
+
+				fi = M_PI_2 * j / q;
+
+				verticies.push_back(R * cos(fi) * cos(th));
+				verticies.push_back(R * sin(fi));
+				verticies.push_back(-R * cos(fi) * sin(th));
+
+				indecies.push_back(index + 1);
+			}
+
+			glVertexPointer(3, GL_FLOAT, 0, verticies.data());
+			glDrawElements(GL_TRIANGLE_STRIP, indecies.size(), GL_UNSIGNED_INT, indecies.data());
 		}
 
 		glFlush();
