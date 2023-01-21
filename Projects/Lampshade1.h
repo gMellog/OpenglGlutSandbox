@@ -11,14 +11,40 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <vector>
 
 namespace Lampshade1
 {
 	static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
 
+	static std::vector<float> vertices
+	{
+		0.f, 0.f, -80.f,
+		0.f, 0.f, -50.f,
+		30.f, 0.f, -80.f,
+		30.f, 0.f, -50.f,
+		30.f, 15.f, -50.f,
+		30.f, 0.f, -80.f,
+		30.f, 15.f, -80.f,
+		0.f, 0.f, -80.f,
+		0.f, 15.f, -80.f,
+		0.f, 0.f, -50.f,
+		0.f, 15.f, -50.f,
+		0.f, 15.f, -80.f,
+		30.f, 15.f, -50.f,
+		30.f, 15.f, -80.f
+	};
+
+	static std::vector<unsigned int> indices
+	{
+		0,1,2,3,3,4,5,6,7,8,9,10,10,11,12,13
+	};
+
 	// Initialization routine.
 	void setup(void)
 	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
@@ -38,28 +64,7 @@ namespace Lampshade1
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
 
-		glBegin(GL_TRIANGLE_STRIP);
-
-		glVertex3f(0.f, 0.f, -80.f);
-		glVertex3f(0.f, 0.f, -50.f);
-		glVertex3f(30.f, 0.f, -80.f);
-		glVertex3f(30.f, 0.f, -50.f);
-
-		glVertex3f(30.f, 0.f, -50.f);
-		glVertex3f(30.f, 15.f, -50.f);
-		glVertex3f(30.f, 0.f, -80.f);
-		glVertex3f(30.f, 15.f, -80.f);
-		glVertex3f(0.f, 0.f, -80.f);
-		glVertex3f(0.f, 15.f, -80.f);
-		glVertex3f(0.f, 0.f, -50.f);
-		glVertex3f(0.f, 15.f, -50.f);
-
-		glVertex3f(0.f, 15.f, -50.f);
-		glVertex3f(0.f, 15.f, -80.f);
-		glVertex3f(30.f, 15.f, -50.f);
-		glVertex3f(30.f, 15.f, -80.f);
-
-		glEnd();
+		glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, indices.data());
 
 		glFlush();
 	}
