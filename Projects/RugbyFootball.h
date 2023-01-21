@@ -11,24 +11,123 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <vector>
+#include <memory>
 
 namespace RugbyFootball
 {
 	static float Xangle = 40.0, Yangle = 0.0, Zangle = 0.0;
 	static float R0 = 20.f;
 	static float R1 = 12.5f;
-	static float R2 = 1.5f;
+	static float R2 = 7.5f;
 	static int N = 15;
 	static int p = 12;
 	static int q = 10;
+	static std::vector<float> vertices;
+	static std::vector<unsigned int*> indices;
+	static std::vector<int> countIndices;
+
+	void fillVertices()
+	{
+		vertices.reserve(3 * (2 * q + 1) * (p + 1));
+
+		int j, i;
+		for (j = -q; j <= q; j++)
+		{
+			//This way pushes vertices just in so later we can define their order with indices in fillIndecies procedure for example
+			for (i = 0; i <= p; ++i)
+			{
+				auto fi = M_PI_2 * j / q;
+				const auto th = 2.0 * i / p * M_PI;
+
+				vertices.push_back(R0 * cos(fi) * cos(th));
+				vertices.push_back(R1 * sin(fi));
+				vertices.push_back(-R2 * cos(fi) * sin(th));
+			}
+
+			/* Push vertices as they go, so indices have to be just in 0,1,2,..., 4q(p + 1) order
+			for (i = 0; i <= p; i++)
+			{
+				auto fi = M_PI_2 * (j + 1) / q;
+				const auto th = 2.0 * i / p * M_PI;
+
+				vertices.push_back(R0 * cos(fi) * cos(th));
+				vertices.push_back(R1 * sin(fi));
+				vertices.push_back(-R2 * cos(fi) * sin(th));
+
+				fi = M_PI_2 * j / q;
+
+				vertices.push_back(R0 * cos(fi) * cos(th));
+				vertices.push_back(R1 * sin(fi));
+				vertices.push_back(-R2 * cos(fi) * sin(th));
+			}
+			*/
+		}
+	}
+
+	void fillIndices()
+	{
+		int j, i;
+		//int k = 0;
+		indices.resize(2 * q);
+
+		for (j = 0; j < indices.size(); j++)
+		{
+			indices[j] = new unsigned int[2 * (p + 1)];
+			
+			for (i = 0; i <= p; i++)
+			{
+				indices[j][2 * i] = ((j + 1) * (p + 1) + i);
+				indices[j][2 * i + 1] = (j * (p + 1) + i);
+			}
+			
+			/*
+			for (i = 0; i <= p; ++i)
+			{
+				indices[j][2 * i] = k;
+				++k;
+				indices[j][2 * i + 1] = k;
+				++k;
+			}
+			*/
+		}
+	}
+
+	void freeIndices()
+	{
+		for (auto i : indices)
+		{
+			if (i != nullptr)
+			{
+				delete[] i;
+				i = nullptr;
+			}
+		}
+	}
+
+	void fillCountIndices()
+	{
+		countIndices.resize(indices.size());
+
+		for (int i = 0; i < indices.size(); ++i)
+		{
+			countIndices[i] = 2 * (p + 1);
+		}
+	}
 
 	// Initialization routine.
 	void setup(void)
 	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+		fillVertices();
+		fillIndices();
+		fillCountIndices();
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
+
 	// Drawing routine.
+
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -44,28 +143,10 @@ namespace RugbyFootball
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
 
-		glBegin(GL_TRIANGLE_STRIP);
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
-		int j, i;
-
-		for (j = -q; j < q; j++)
-		{
-			// One latitudinal triangle strip.
-			glBegin(GL_TRIANGLE_STRIP);
-			for (i = 0; i <= p; i++)
-			{
-				auto fi = M_PI_2 * (j + 1) / q;
-				const auto th = 2.0 * i / p * M_PI;
-
-				glVertex3f(R0 * cos(fi) * cos(th), R1 * sin(fi), -R2 * cos(fi) * sin(th));
-
-				fi = M_PI_2 * j / q;
-
-				glVertex3f(R0 * cos(fi) * cos(th), R1 * sin(fi), -R2 * cos(fi) * sin(th));
-
-			}
-			glEnd();
-		}
+		glMultiDrawElements(GL_TRIANGLE_STRIP, countIndices.data(), GL_UNSIGNED_INT, (const void**)indices.data(), indices.size());
+		//glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size() / 3); easier
 
 		glFlush();
 	}
@@ -86,6 +167,7 @@ namespace RugbyFootball
 		switch (key)
 		{
 		case 27:
+			freeIndices();
 			exit(0);
 			break;
 		case 'x':

@@ -1,8 +1,8 @@
 
-#include "Projects/Lampshade1.h"
+#include "Projects/RugbyFootball.h"
 
 int main(int argc, char** argv)
 {
-	Lampshade1::main(argc, argv);
+	RugbyFootball::main(argc, argv);
 	return 0;
 }
