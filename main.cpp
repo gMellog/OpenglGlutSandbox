@@ -1,8 +1,8 @@
 
-#include "MultipleLists.h"
+#include "MakeCircleWithTwoClicks.h"
 
 int main(int argc, char** argv)
 {
-	MultipleLists::main(argc, argv);
+	MakeCircleWithTwoClicks::main(argc, argv);
 	return 0;
 }
