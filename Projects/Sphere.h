@@ -23,43 +23,208 @@ namespace Sphere
 	static int p = 6; // Number of longitudinal slices.
 	static int q = 4; // Number of latitudinal slices.
 	static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
-	static std::vector<float> vertices;
 
-	void clearVertices()
+	struct SphereHandler
 	{
-		vertices.erase(std::begin(vertices), std::end(vertices));
-	}
-
-	void fillVertices()
+		virtual ~SphereHandler() = default;
+		virtual void setup() = 0;
+		virtual void drawScene() = 0;
+		virtual void pOrQChanged() = 0;
+	};
+	
+	struct ImmediateHandler : SphereHandler
 	{
-		int j, i;
-		for (j = -q; j < q; j++)
+		void setup() override
 		{
-			for (i = 0; i <= p; i++)
+
+		}
+
+		void drawScene() override
+		{
+			int j, i;
+			for (j = -q; j < q; j++)
 			{
-				auto fi = M_PI_2 * (j + 1) / q;
-				const auto th = 2.0 * i / p * M_PI;
+				// One latitudinal triangle strip.
+				glBegin(GL_TRIANGLE_STRIP);
+				for (i = 0; i <= p; i++)
+				{
+					auto fi = M_PI_2 * (j + 1) / q;
+					const auto th = 2.0 * i / p * M_PI;
 
-				vertices.push_back(R * cos(fi) * cos(th));
-				vertices.push_back(R * sin(fi));
-				vertices.push_back(-R * cos(fi) * sin(th));
+					glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
 
-				fi = M_PI_2 * j / q;
+					fi = M_PI_2 * j / q;
 
-				vertices.push_back(R * cos(fi) * cos(th));
-				vertices.push_back(R * sin(fi));
-				vertices.push_back(-R * cos(fi) * sin(th));
+					glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
 
+				}
+				glEnd();
 			}
 		}
-	}
+
+		void pOrQChanged() override
+		{
+
+		}
+	};
+
+	struct DrawElementsHandler : SphereHandler
+	{
+		void setup() override
+		{
+			glEnableClientState(GL_VERTEX_ARRAY);
+		}
+
+		void drawScene() override
+		{
+			int j, i, index;
+			for (j = -q; j < q; j++)
+			{
+				std::vector<float> vertices;
+				vertices.reserve((p + 1) * 3);
+
+				std::vector<unsigned int> indices;
+				indices.reserve(p + 1);
+
+				for (i = 0, index = 0; i <= p; i++, index += 2)
+				{
+					auto fi = M_PI_2 * (j + 1) / q;
+					const auto th = 2.0 * i / p * M_PI;
+
+					vertices.push_back(R * cos(fi) * cos(th));
+					vertices.push_back(R * sin(fi));
+					vertices.push_back(-R * cos(fi) * sin(th));
+
+					indices.push_back(index);
+
+					fi = M_PI_2 * j / q;
+
+					vertices.push_back(R * cos(fi) * cos(th));
+					vertices.push_back(R * sin(fi));
+					vertices.push_back(-R * cos(fi) * sin(th));
+
+					indices.push_back(index + 1);
+				}
+
+				glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+				glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, indices.data());
+			}
+		}
+
+		void pOrQChanged() override
+		{
+
+		}
+	};
+
+	struct DrawArraysHandler : SphereHandler
+	{
+		void setup() override
+		{
+			fillVertices();
+			glEnableClientState(GL_VERTEX_ARRAY);
+		}
+
+		void drawScene() override
+		{
+			glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size() / 3);
+		}
+
+		void pOrQChanged() override
+		{
+			clearVertices();
+			fillVertices();
+		}
+
+		private:
+
+		void fillVertices()
+		{
+			int j, i;
+			for (j = -q; j < q; j++)
+			{
+				for (i = 0; i <= p; i++)
+				{
+					auto fi = M_PI_2 * (j + 1) / q;
+					const auto th = 2.0 * i / p * M_PI;
+
+					vertices.push_back(R * cos(fi) * cos(th));
+					vertices.push_back(R * sin(fi));
+					vertices.push_back(-R * cos(fi) * sin(th));
+
+					fi = M_PI_2 * j / q;
+
+					vertices.push_back(R * cos(fi) * cos(th));
+					vertices.push_back(R * sin(fi));
+					vertices.push_back(-R * cos(fi) * sin(th));
+
+				}
+			}
+		}
+		
+		void clearVertices()
+		{
+			vertices.erase(std::begin(vertices), std::end(vertices));
+		}
+
+		std::vector<float> vertices;
+	};
+
+	struct ListsHandler : SphereHandler
+	{
+		void setup() override
+		{
+			hemSphere = glGenLists(1);
+			glNewList(hemSphere, GL_COMPILE);
+			int j, i;
+			for (j = 0; j < q; j++)
+			{
+				glBegin(GL_TRIANGLE_STRIP);
+				for (i = 0; i <= p; i++)
+				{
+					auto fi = M_PI_2 * (j + 1) / q;
+					const auto th = 2.0 * i / p * M_PI;
+
+					glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
+
+					fi = M_PI_2 * j / q;
+
+					glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
+
+				}
+				glEnd();
+			}
+			glEndList();
+		}
+
+		void drawScene() override
+		{
+			glCallList(hemSphere);
+
+			glScalef(1.f, -1.f, 1.f);
+			glCallList(hemSphere);
+		}
+
+		void pOrQChanged()
+		{
+			setup();
+		}
+
+		private:
+		unsigned int hemSphere;
+
+	};
+
+	static std::unique_ptr<SphereHandler> sphereHandler;
 
 	// Initialization routine.
 	void setup(void)
 	{
-		fillVertices();
 		glClearColor(1.0, 1.0, 1.0, 0.0);
-		glEnableClientState(GL_VERTEX_ARRAY);
+
+		sphereHandler = std::make_unique<ListsHandler>();
+		sphereHandler->setup();
 	}
 
 	// Drawing routine.
@@ -78,69 +243,9 @@ namespace Sphere
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glColor3f(0.0, 0.0, 0.0);
 		
-		/* One way
-		int j, i;
-		for (j = -q; j < q; j++)
-		{
-			// One latitudinal triangle strip.
-			glBegin(GL_TRIANGLE_STRIP);
-			for (i = 0; i <= p; i++)
-			{
-				auto fi = M_PI_2 * (j + 1) / q;
-				const auto th = 2.0 * i / p  * M_PI;
-
-				glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
-
-				fi = M_PI_2 * j / q;
-
-				glVertex3f(R * cos(fi) * cos(th), R * sin(fi), -R * cos(fi) * sin(th));
-
-			}
-			glEnd();
-		}
-		*/
+		if (sphereHandler)
+			sphereHandler->drawScene();
 		
-		/*Another way
-		int j, i, index; 
-		for (j = -q; j < q; j++)
-		{
-			std::vector<float> vertices;
-			vertices.reserve((p + 1) * 3);
-
-			std::vector<unsigned int> indices;
-			indices.reserve(p + 1);
-
-			for (i = 0, index = 0; i <= p; i++, index += 2)
-			{
-				auto fi = M_PI_2 * (j + 1) / q;
-				const auto th = 2.0 * i / p * M_PI;
-
-				vertices.push_back(R * cos(fi) * cos(th));
-				vertices.push_back(R * sin(fi));
-				vertices.push_back(-R * cos(fi) * sin(th));
-
-				indices.push_back(index);
-
-				fi = M_PI_2 * j / q;
-
-				vertices.push_back(R * cos(fi) * cos(th));
-				vertices.push_back(R * sin(fi));
-				vertices.push_back(-R * cos(fi) * sin(th));
-
-				indices.push_back(index + 1);
-			}
-
-			glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-			glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, indices.data());
-		}
-		*/
-
-		
-		//Another another way, actually the most effective
-		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.size() / 3);
-		
-
 		glFlush();
 	}
 
@@ -164,31 +269,31 @@ namespace Sphere
 			break;
 		case 'P':
 			p += 1;
-			clearVertices();
-			fillVertices();
+			if(sphereHandler)
+				sphereHandler->pOrQChanged();
 			glutPostRedisplay();
 			break;
 		case 'p':
 			if (p > 3)
 			{
 				p -= 1;
-				clearVertices();
-				fillVertices();
+				if (sphereHandler)
+					sphereHandler->pOrQChanged();
 				glutPostRedisplay();
 			}
 			break;
 		case 'Q':
 			q += 1;
-			clearVertices();
-			fillVertices();
+			if (sphereHandler)
+				sphereHandler->pOrQChanged();
 			glutPostRedisplay();
 			break;
 		case 'q':
 			if (q > 3) 
 			{
 				q -= 1;
-				clearVertices();
-				fillVertices();
+				if (sphereHandler)
+					sphereHandler->pOrQChanged();
 				glutPostRedisplay();
 			}
 			break;
