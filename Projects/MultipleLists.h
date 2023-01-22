@@ -1,9 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////         
-// multipleLists.cpp
-//
-// This program demonstrates the definition and execution of multiple  display lists.  
-// 
-// Sumanta Guha.
+// This program using multiple  display lists.  
 /////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
@@ -12,14 +8,12 @@
 #include <GL/freeglut.h> 
 #include <vector>
 
-// Globals.
 namespace MultipleLists
 {
-	static unsigned int base; // Display lists base index.
-	static std::vector<int> offsets{ 3, 0, 3, 2, 3, 1, 3, 1, 3, 0, 3, 2, 3 }; // Array of display list offsets.
+	static unsigned int base;
+	static std::vector<int> offsets{ 3, 0, 3, 2, 3, 1, 3, 1, 3, 0, 3, 2, 3 };
 
-	// Initialization routine.
-	static void setup(void)
+	void setup(void)
 	{
 		base = glGenLists(4);
 
@@ -71,7 +65,6 @@ namespace MultipleLists
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -117,7 +110,7 @@ namespace MultipleLists
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);
-		glutCreateWindow("multipleLists.cpp");
+		glutCreateWindow("multipleLists");
 		glutDisplayFunc(drawScene);
 		glutReshapeFunc(resize);
 		glutKeyboardFunc(keyInput);

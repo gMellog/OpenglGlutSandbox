@@ -1,9 +1,6 @@
 #pragma once
 ///////////////////////////////////////////////////////         
-// childrenSide.h
-//
 // This program draws 3D children slide
-// 
 ///////////////////////////////////////////////////////        
 
 #define _USE_MATH_DEFINES 
@@ -18,7 +15,6 @@ namespace ChildrenSlide
 {
 	static auto N = 10;
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -59,13 +55,11 @@ namespace ChildrenSlide
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -76,7 +70,6 @@ namespace ChildrenSlide
 		glLoadIdentity();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -90,7 +83,6 @@ namespace ChildrenSlide
 		}
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		glutInit(&argc, argv);

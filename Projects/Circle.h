@@ -1,10 +1,8 @@
 /////////////////////////////////////////////////////////////////////         
-//
 // This program draws a circle with glDrawArrays()
 //
 // Interaction:
 // Press +/- to increase/decrease the number of vertices of the loop. 
-//
 ///////////////////////////////////////////////////////////////////// 
 
 #define _USE_MATH_DEFINES 
@@ -18,10 +16,10 @@
 
 namespace Circle
 {
-	static float R = 40.0; // Radius of circle.
-	static float X = 50.0; // X-coordinate of center of circle.
-	static float Y = 50.0; // Y-coordinate of center of circle.
-	static int N = 3; // Number of vertices on circle.
+	static float R = 40.0;
+	static float X = 50.0; 
+	static float Y = 50.0; 
+	static int N = 3; 
 
 	static std::vector<float> vertices;
 
@@ -46,7 +44,6 @@ namespace Circle
 		vertices.shrink_to_fit();
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -58,7 +55,6 @@ namespace Circle
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		fillVertices();
@@ -66,7 +62,6 @@ namespace Circle
 		glEnableClientState(GL_VERTEX_ARRAY);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -77,7 +72,6 @@ namespace Circle
 		glLoadIdentity();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -105,14 +99,12 @@ namespace Circle
 		}
 	}
 
-	// Routine to output interaction instructions to the C++ window.
 	void printInteraction(void)
 	{
 		std::cout << "Interaction:" << std::endl;
 		std::cout << "Press +/- to increase/decrease the number of vertices on the circle." << std::endl;
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		printInteraction();

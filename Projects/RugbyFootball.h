@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////          
-// This program draws lampshade2
+// This program draws RugbyFootball
 //
 // Interaction:
 // Press x, X, y, Y, z, Z to turn the lampshade.
@@ -68,7 +68,6 @@ namespace RugbyFootball
 	void fillIndices()
 	{
 		int j, i;
-		//int k = 0;
 		indices.resize(2 * q);
 
 		for (j = 0; j < indices.size(); j++)
@@ -81,6 +80,7 @@ namespace RugbyFootball
 				indices[j][2 * i + 1] = (j * (p + 1) + i);
 			}
 			
+			//int k = 0;
 			/*
 			for (i = 0; i <= p; ++i)
 			{
@@ -115,7 +115,6 @@ namespace RugbyFootball
 		}
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -125,8 +124,6 @@ namespace RugbyFootball
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-
-	// Drawing routine.
 
 	void drawScene(void)
 	{
@@ -151,7 +148,6 @@ namespace RugbyFootball
 		glFlush();
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -161,7 +157,6 @@ namespace RugbyFootball
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -205,14 +200,12 @@ namespace RugbyFootball
 		}
 	}
 
-	// Routine to output interaction instructions to the C++ window.
 	void printInteraction(void)
 	{
 		std::cout << "Interaction:\n";
 		std::cout << "Press x, X, y, Y, z, Z to turn the lampshade" << std::endl;
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		printInteraction();

@@ -1,10 +1,8 @@
 /////////////////////////////////////////////////////////////////////         
-//
 // This program draws a circle with glDrawArrays()
 //
 // Interaction:
 // Press +/- to increase/decrease the number of vertices of the loop. 
-//
 ///////////////////////////////////////////////////////////////////// 
 
 #define _USE_MATH_DEFINES 
@@ -150,7 +148,6 @@ namespace ConcentricCirclesRing
 		std::cout << "Press +/- to increase/decrease the number of vertices on the circle." << std::endl;
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		printInteraction();

@@ -1,12 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////          
-//
 // This program approximates a sphere with triangle strips.
 //
 // Interaction:
 // Press P/p to increase/decrease the number of longitudinal slices.
 // Press Q/q to increase/decrease the number of latitudinal slices.
 // Press x, X, y, Y, z, Z to turn the sphere.
-//
 /////////////////////////////////////////////////////////////////////////////////////// 
 
 #define _USE_MATH_DEFINES 
@@ -224,7 +222,6 @@ namespace Sphere
 
 	static std::unique_ptr<SphereHandler> sphereHandler;
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
@@ -233,7 +230,6 @@ namespace Sphere
 		sphereHandler->setup();
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -344,7 +340,6 @@ namespace Sphere
 			<< "Press x, X, y, Y, z, Z to turn the Sphere." << std::endl;
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		printInteraction();

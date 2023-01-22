@@ -40,7 +40,6 @@ namespace Lampshade1
 		0,1,2,3,3,4,5,6,7,8,9,10,10,11,12,13
 	};
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -48,7 +47,6 @@ namespace Lampshade1
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -69,7 +67,6 @@ namespace Lampshade1
 		glFlush();
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -79,7 +76,6 @@ namespace Lampshade1
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -122,14 +118,12 @@ namespace Lampshade1
 		}
 	}
 
-	// Routine to output interaction instructions to the C++ window.
 	void printInteraction(void)
 	{
 		std::cout << "Interaction:\n";
 		std::cout << "Press x, X, y, Y, z, Z to turn the lampshade" << std::endl;
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		printInteraction();

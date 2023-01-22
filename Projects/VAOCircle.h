@@ -1,7 +1,5 @@
 /////////////////////////////////////////////////////////////////////         
-//
 // This program draws a circle with of VBO and glDrawArrays()
-//
 ///////////////////////////////////////////////////////////////////// 
 
 #define _USE_MATH_DEFINES 
@@ -15,10 +13,10 @@
 
 namespace VAOCircle
 {
-	static float R = 40.0; // Radius of circle.
-	static float X = 50.0; // X-coordinate of center of circle.
-	static float Y = 50.0; // Y-coordinate of center of circle.
-	static unsigned int N = 40; // Number of vertices on circle.
+	static float R = 40.0; 
+	static float X = 50.0; 
+	static float Y = 50.0; 
+	static unsigned int N = 40; 
 	static unsigned int VAO;
 	static std::vector<float> vertices;
 
@@ -45,7 +43,6 @@ namespace VAOCircle
 		vertices.shrink_to_fit();
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -58,7 +55,6 @@ namespace VAOCircle
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		fillVertices();
@@ -78,7 +74,6 @@ namespace VAOCircle
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -89,7 +84,6 @@ namespace VAOCircle
 		glLoadIdentity();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -102,7 +96,6 @@ namespace VAOCircle
 		}
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		glutInit(&argc, argv);

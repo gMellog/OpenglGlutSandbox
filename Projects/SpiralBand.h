@@ -1,7 +1,5 @@
 ///////////////////////////////////////////////////////         
-//
 // This program make spiral band.
-//
 ///////////////////////////////////////////////////////        
 
 #define _USE_MATH_DEFINES 
@@ -46,7 +44,6 @@ namespace SpiralBand
 		}
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glLoadIdentity();
@@ -66,7 +63,6 @@ namespace SpiralBand
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		fillVertices();
@@ -76,7 +72,6 @@ namespace SpiralBand
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -87,7 +82,6 @@ namespace SpiralBand
 		glLoadIdentity();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -130,7 +124,6 @@ namespace SpiralBand
 		}
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		glutInit(&argc, argv);

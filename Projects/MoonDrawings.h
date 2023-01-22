@@ -1,14 +1,11 @@
 #pragma once
 ///////////////////////////////////////////////////////         
-// childrenSide.h
-//
 // This program draws 3 pictures of the moon:
 // 1. crescent moon
 // 2. half-moon
 // 3. three quarter-moon
 // 
 // Press space for switch between wireframe and fill modes
-// 
 ///////////////////////////////////////////////////////        
 
 #define _USE_MATH_DEFINES 
@@ -431,7 +428,6 @@ namespace MoonDrawings
 		glEnd();
 	}
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -452,13 +448,11 @@ namespace MoonDrawings
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -469,7 +463,6 @@ namespace MoonDrawings
 		glLoadIdentity();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -486,7 +479,6 @@ namespace MoonDrawings
 		}
 	}
 
-	// Main routine.
 	int main(int argc, char** argv)
 	{
 		glutInit(&argc, argv);

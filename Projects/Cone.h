@@ -1,13 +1,10 @@
 #pragma once
 ///////////////////////////////////////////////////////         
-// crossSectionRing.h
-//
 // This program draws 3D cone with user 
 // defined amount of sides.
 // 
 // Sides could be set by the user with terminal where 
 // also used some technics of input handling 
-// 
 ///////////////////////////////////////////////////////        
 
 #define _USE_MATH_DEFINES 
@@ -22,7 +19,6 @@ namespace Cone
 {
 	static int N;
 
-	// Drawing routine.
 	void drawScene(void)
 	{
 		const float X = 0.f;
@@ -51,13 +47,11 @@ namespace Cone
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -109,7 +103,6 @@ namespace Cone
 		glutPostRedisplay();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -134,7 +127,7 @@ namespace Cone
 			"2. Follow to prompted instructions\n"
 			"3. Finally you'll get cone respective your response\n";
 	}
-	// Main routine.
+
 	int main(int argc, char** argv)
 	{
 		printInteraction();

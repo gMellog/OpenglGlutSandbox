@@ -1,13 +1,10 @@
 #pragma once
 ///////////////////////////////////////////////////////         
-// crossSectionRing.h
-//
 // This program draws 3D cross-section ring with user 
 // defined amount of sides.
 // 
 // Sides could be set by the user with terminal where 
 // also used some technics of input handling 
-// 
 ///////////////////////////////////////////////////////        
 
 #define _USE_MATH_DEFINES 
@@ -23,7 +20,7 @@ namespace CrossSectionRing
 	static int N = 3;
 	static int XAngle, YAngle = 55, ZAngle;
 	static int rotateAngle = 5;
-	// Drawing routine.
+
 	void drawScene(void)
 	{
 		glLoadIdentity();
@@ -57,13 +54,11 @@ namespace CrossSectionRing
 		glFlush();
 	}
 
-	// Initialization routine.
 	void setup(void)
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -115,7 +110,6 @@ namespace CrossSectionRing
 		glutPostRedisplay();
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -173,7 +167,7 @@ namespace CrossSectionRing
 			"2. Follow to prompted instructions\n"
 			"3. Finally you'll get cross-section ring respective your response\n";
 	}
-	// Main routine.
+
 	int main(int argc, char** argv)
 	{
 		printInteraction();
