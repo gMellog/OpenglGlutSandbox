@@ -1,8 +1,8 @@
 
-#include "BullSEye.h"
+#include "VBOCircle.h"
 
 int main(int argc, char** argv)
 {
-	BullSEye::main(argc, argv);
+	VBOCircle::main(argc, argv);
 	return 0;
 }
