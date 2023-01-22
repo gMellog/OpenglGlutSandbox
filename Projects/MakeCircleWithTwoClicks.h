@@ -23,8 +23,8 @@ namespace MakeCircleWithTwoClicks
 	{
 		Point2D(float pX = 0.f, float pY = 0.f)
 			:
-			X{pX},
-			Y{pY}
+			X{ pX },
+			Y{ pY }
 		{
 
 		}
@@ -53,7 +53,8 @@ namespace MakeCircleWithTwoClicks
 			counts{},
 			circles{},
 			temp{},
-			fillCenter{true}
+			fillCenter{ true },
+			inPassiveMode{}
 		{
 
 		}
@@ -85,19 +86,39 @@ namespace MakeCircleWithTwoClicks
 		{
 			if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 			{
-				Point2D p{static_cast<float>(x), static_cast<float>(height - y)};
+				Point2D p{ static_cast<float>(x), static_cast<float>(height - y) };
 				if (fillCenter)
 				{
 					temp.center = p;
 				}
 				else
 				{
-					temp.circlePoint = p;
-					addCircle();
-					glutPostRedisplay();
+					inPassiveMode = false;
 				}
 
 				fillCenter = !fillCenter;
+			}
+		}
+
+		void passiveMouseMotion(int x, int y)
+		{
+			if (!fillCenter)
+			{
+				Point2D p{ static_cast<float>(x), static_cast<float>(height - y) };
+
+				temp.circlePoint = p;
+
+				if (!inPassiveMode)
+				{
+					inPassiveMode = true;
+				}
+				else
+				{
+					eraseLastCircle();
+				}
+
+				addCircle();
+				glutPostRedisplay();
 			}
 		}
 
@@ -138,41 +159,66 @@ namespace MakeCircleWithTwoClicks
 				break;
 			}
 		}
-		
+
 	private:
 
 		Circle temp;
 		bool fillCenter;
-		
+		bool inPassiveMode;
+
+		void eraseLastCircle()
+		{
+			circles.erase(std::end(circles) - 1);
+			const auto end = vertices.cend();
+
+			const auto it = (end - (3 * (N + 1)));
+
+			vertices.erase(end - (3 * (N + 1)), end);
+			firsts.erase(std::end(firsts) - 1);
+			counts.erase(std::end(counts) - 1);
+		}
+
 		void addCircle()
 		{
 			circles.push_back(temp);
-
-			removeEverything();
-			drawVertices();
+			fillCircle(temp.center, temp.circlePoint);
+			fillFirst(circles.size() - 1);
+			fillCount();
 		}
-		
+
+		void fillCircle(Point2D center, Point2D circlePoint)
+		{
+			const float RX = center.X - circlePoint.X;
+			const float RY = center.Y - circlePoint.Y;
+
+			const auto R = sqrt(RX * RX + RY * RY);
+
+			float t;
+			for (int i = 0; i <= N; ++i)
+			{
+				t = 2 * M_PI * i / N;
+				vertices.push_back(center.X + R * cos(t));
+				vertices.push_back(center.Y + R * sin(t));
+				vertices.push_back(0.0);
+			}
+		}
+
+		void fillFirst(int i)
+		{
+			firsts.push_back(i * (N + 1));
+		}
+
+		void fillCount()
+		{
+			counts.push_back(N + 1);
+		}
+
 		void fillVertices()
 		{
-			vertices.reserve(circles.size() * (N + 1) * 3);
+			vertices.reserve(circles.size() * 3 * (N + 1));
 			for (auto it = std::begin(circles); it != std::end(circles); it += 1)
 			{
-				const auto center = it->center;
-				const auto circlePoint = it->circlePoint;
-
-				const float RX = center.X - circlePoint.X;
-				const float RY = center.Y - circlePoint.Y;
-
-				const auto R = sqrt(RX * RX + RY * RY);
-
-				float t;
-				for (int i = 0; i <= N; ++i)
-				{
-					t = 2 * M_PI * i / N;
-					vertices.push_back(center.X + R * cos(t));
-					vertices.push_back(center.Y + R * sin(t));
-					vertices.push_back(0.0);
-				}
+				fillCircle(it->center, it->circlePoint);
 			}
 
 			vertices.shrink_to_fit();
@@ -180,11 +226,11 @@ namespace MakeCircleWithTwoClicks
 
 		void fillFirsts()
 		{
-			firsts.resize(circles.size());
+			firsts.reserve(circles.size());
 
-			for (int i = 0; i < firsts.size(); ++i)
+			for (int i = 0; i < circles.size(); ++i)
 			{
-				firsts[i] = i * (N + 1);
+				fillFirst(i);
 			}
 
 			firsts.shrink_to_fit();
@@ -192,11 +238,11 @@ namespace MakeCircleWithTwoClicks
 
 		void fillCounts()
 		{
-			counts.resize(circles.size());
+			counts.reserve(circles.size());
 
-			for (int i = 0; i < counts.size(); ++i)
+			for (int i = 0; i < circles.size(); ++i)
 			{
-				counts[i] = N + 1;
+				fillCount();
 			}
 
 			counts.shrink_to_fit();
@@ -210,7 +256,7 @@ namespace MakeCircleWithTwoClicks
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glColor3f(0.f, 0.f, 0.f);
-	
+
 		master.drawScene();
 
 		glFlush();
@@ -253,6 +299,11 @@ namespace MakeCircleWithTwoClicks
 		master.mouseControl(button, state, x, y);
 	}
 
+	void passiveMouseMotion(int x, int y)
+	{
+		master.passiveMouseMotion(x, y);
+	}
+
 	int main(int argc, char** argv)
 	{
 		printInteraction();
@@ -269,6 +320,7 @@ namespace MakeCircleWithTwoClicks
 		glutReshapeFunc(resize);
 		glutKeyboardFunc(keyInput);
 		glutMouseFunc(mouseControl);
+		glutPassiveMotionFunc(passiveMouseMotion);
 
 		glewExperimental = GL_TRUE;
 		glewInit();
