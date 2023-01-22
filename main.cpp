@@ -1,8 +1,8 @@
 
-#include "VBOBullSEye.h"
+#include "VAOSphere.h"
 
 int main(int argc, char** argv)
 {
-	VBOBullSEye::main(argc, argv);
+	VAOSphere::main(argc, argv);
 	return 0;
 }
