@@ -13,13 +13,13 @@
 #include <GL/freeglut.h> 
 #include <vector>
 
-namespace VBOCircle
+namespace VAOCircle
 {
 	static float R = 40.0; // Radius of circle.
 	static float X = 50.0; // X-coordinate of center of circle.
 	static float Y = 50.0; // Y-coordinate of center of circle.
 	static unsigned int N = 40; // Number of vertices on circle.
-
+	static unsigned int VAO;
 	static std::vector<float> vertices;
 
 	static unsigned int verticyID;
@@ -51,6 +51,8 @@ namespace VBOCircle
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glColor3f(0.f, 0.f, 0.f);
+		
+		//it was already bounded (in setup())so we don't need to call it again
 		glDrawArrays(GL_LINE_STRIP, 0, vertices.size() / 3);
 
 		glFlush();
@@ -61,16 +63,19 @@ namespace VBOCircle
 	{
 		fillVertices();
 
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+
 		glGenBuffers(1, &verticyID);
 
 		glBindBuffer(GL_ARRAY_BUFFER, verticyID);
 
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
+		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, 0);
 
 		glClearColor(1.0, 1.0, 1.0, 0.0);
-		glEnableClientState(GL_VERTEX_ARRAY);
 	}
 
 	// OpenGL window reshape routine.
@@ -108,7 +113,7 @@ namespace VBOCircle
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);
-		glutCreateWindow("VBOCircle");
+		glutCreateWindow("VAOCircle");
 		glutDisplayFunc(drawScene);
 		glutReshapeFunc(resize);
 		glutKeyboardFunc(keyInput);

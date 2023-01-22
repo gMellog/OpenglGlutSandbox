@@ -1,8 +1,8 @@
 
-#include "VAOSphere.h"
+#include "Projects/VAOCircle.h"
 
 int main(int argc, char** argv)
 {
-	VAOSphere::main(argc, argv);
+	VAOCircle::main(argc, argv);
 	return 0;
 }
