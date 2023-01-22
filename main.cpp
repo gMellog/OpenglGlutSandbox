@@ -1,8 +1,8 @@
 
-#include "ConcentricCirclesRing.h"
+#include "Projects/Sphere.h"
 
 int main(int argc, char** argv)
 {
-	ConcentricCirclesRing::main(argc, argv);
+	Sphere::main(argc, argv);
 	return 0;
 }

@@ -20,8 +20,8 @@
 namespace Sphere
 {
 	static float R = 5.0;
-	static int p = 6; // Number of longitudinal slices.
-	static int q = 4; // Number of latitudinal slices.
+	static int p = 6;
+	static int q = 4;
 	static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
 
 	struct SphereHandler
@@ -44,7 +44,6 @@ namespace Sphere
 			int j, i;
 			for (j = -q; j < q; j++)
 			{
-				// One latitudinal triangle strip.
 				glBegin(GL_TRIANGLE_STRIP);
 				for (i = 0; i <= p; i++)
 				{
@@ -175,7 +174,29 @@ namespace Sphere
 	{
 		void setup() override
 		{
-			hemSphere = glGenLists(1);
+			initList(true);
+		}
+
+		void drawScene() override
+		{
+			glCallList(hemSphere);
+
+			glScalef(1.f, -1.f, 1.f);
+			glCallList(hemSphere);
+		}
+
+		void pOrQChanged() override
+		{
+			initList(false);
+		}
+
+		private:
+
+		void initList(bool initial = true)
+		{
+			if(initial)
+				hemSphere = glGenLists(1);
+			
 			glNewList(hemSphere, GL_COMPILE);
 			int j, i;
 			for (j = 0; j < q; j++)
@@ -197,21 +218,6 @@ namespace Sphere
 			}
 			glEndList();
 		}
-
-		void drawScene() override
-		{
-			glCallList(hemSphere);
-
-			glScalef(1.f, -1.f, 1.f);
-			glCallList(hemSphere);
-		}
-
-		void pOrQChanged()
-		{
-			setup();
-		}
-
-		private:
 		unsigned int hemSphere;
 
 	};
@@ -249,7 +255,6 @@ namespace Sphere
 		glFlush();
 	}
 
-	// OpenGL window reshape routine.
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
@@ -259,7 +264,6 @@ namespace Sphere
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	// Keyboard input processing routine.
 	void keyInput(unsigned char key, int x, int y)
 	{
 		switch (key)
@@ -332,7 +336,6 @@ namespace Sphere
 		}
 	}
 
-	// Routine to output interaction instructions to the C++ window.
 	void printInteraction(void)
 	{
 		std::cout << "Interaction:" << std::endl;
