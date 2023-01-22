@@ -1,8 +1,8 @@
 
-#include "Projects/Sphere.h"
+#include "MultipleLists.h"
 
 int main(int argc, char** argv)
 {
-	Sphere::main(argc, argv);
+	MultipleLists::main(argc, argv);
 	return 0;
 }
