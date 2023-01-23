@@ -39,6 +39,12 @@ namespace MakeCircleWithTwoClicks
 		Point2D circlePoint;
 	};
 
+	template<typename T>
+	T clamp(const T& min, const T& max, const T& value)
+	{
+		return value <= min ? min : value >= max ? max : value;
+	}
+
 	struct MasterVertices
 	{
 		std::vector<float> vertices;
@@ -54,7 +60,12 @@ namespace MakeCircleWithTwoClicks
 			circles{},
 			temp{},
 			fillCenter{ true },
-			inPassiveMode{}
+			inPassiveMode{},
+			passiveOpen{ true },
+			wheelFirstTime{ true },
+			minR{5.f},
+			maxR{100.f},
+			wheelOffset{1.f}
 		{
 
 		}
@@ -98,11 +109,20 @@ namespace MakeCircleWithTwoClicks
 
 				fillCenter = !fillCenter;
 			}
+			else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+			{
+				if (passiveOpen)
+				{
+					wheelFirstTime = true;
+				}
+
+				passiveOpen = !passiveOpen;
+			}
 		}
 
 		void passiveMouseMotion(int x, int y)
 		{
-			if (!fillCenter)
+			if (passiveOpen & (!fillCenter))
 			{
 				Point2D p{ static_cast<float>(x), static_cast<float>(height - y) };
 
@@ -114,6 +134,37 @@ namespace MakeCircleWithTwoClicks
 				}
 				else
 				{
+					eraseLastCircle();
+				}
+
+				addCircle();
+				glutPostRedisplay();
+			}
+		}
+
+		void mouseWheel(int wheel, int direction, int x, int y)
+		{
+			if (!passiveOpen)
+			{
+				if (fillCenter && wheelFirstTime)
+				{
+					temp.center.X = x;
+					temp.center.Y = height - y;
+				}
+				
+				Point2D p{ temp.center.X + minR, temp.center.Y};
+
+				temp.circlePoint = p;
+
+				if (wheelFirstTime)
+				{
+					wheelFirstTime = false;
+				}
+				else
+				{
+					temp.circlePoint = circles.back().circlePoint;
+					temp.circlePoint.X = clamp(temp.center.X + minR, temp.center.X + maxR, temp.circlePoint.X + wheelOffset * direction);
+					
 					eraseLastCircle();
 				}
 
@@ -165,6 +216,15 @@ namespace MakeCircleWithTwoClicks
 		Circle temp;
 		bool fillCenter;
 		bool inPassiveMode;
+		bool passiveOpen;
+		bool wheelFirstTime;
+
+		float minR;
+		float maxR;
+
+		float wheelOffset;
+
+
 
 		void eraseLastCircle()
 		{
@@ -304,6 +364,11 @@ namespace MakeCircleWithTwoClicks
 		master.passiveMouseMotion(x, y);
 	}
 
+	void mouseWheel(int wheel, int direction, int x, int y)
+	{
+		master.mouseWheel(wheel, direction, x, y);
+	}
+
 	int main(int argc, char** argv)
 	{
 		printInteraction();
@@ -321,6 +386,7 @@ namespace MakeCircleWithTwoClicks
 		glutKeyboardFunc(keyInput);
 		glutMouseFunc(mouseControl);
 		glutPassiveMotionFunc(passiveMouseMotion);
+		glutMouseWheelFunc(mouseWheel);
 
 		glewExperimental = GL_TRUE;
 		glewInit();
