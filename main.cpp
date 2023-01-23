@@ -1,8 +1,8 @@
 
-#include "GlutMenuTest.h"
+#include "Projects/Circle.h"
 
 int main(int argc, char** argv)
 {
-	GlutMenuTest::main(argc, argv);
+	Circle::main(argc, argv);
 	return 0;
 }

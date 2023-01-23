@@ -22,6 +22,20 @@ namespace Circle
 	static int N = 3; 
 
 	static std::vector<float> vertices;
+	static std::vector<std::pair<int, int>> stippleModes;
+	static int currLineModeIndex = 0;
+
+	void initStippleModes()
+	{
+		stippleModes =
+		{
+			{0, 0xFFFF},
+			{1, 0x5555},
+			{1, 0x0101},
+			{1, 0x00FF},
+			{5, 0x5555}
+		};
+	}
 
 	void clearVertices()
 	{
@@ -49,14 +63,20 @@ namespace Circle
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glColor3f(0.f, 0.f, 0.f);
+		glEnable(GL_LINE_STIPPLE);
+		const auto& lineMode = stippleModes[currLineModeIndex];
+		glLineStipple(lineMode.first, lineMode.second);
+
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 		glDrawArrays(GL_LINE_STRIP, 0, vertices.size() / 3);
+		glDisable(GL_LINE_STIPPLE);
 
 		glFlush();
 	}
 
 	void setup(void)
 	{
+		initStippleModes();
 		fillVertices();
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -94,6 +114,19 @@ namespace Circle
 				glutPostRedisplay();
 			}
 			break;
+		case ' ':
+		{
+			++currLineModeIndex;
+			const auto lastIndex = stippleModes.size() - 1;
+
+			if (currLineModeIndex > lastIndex)
+			{
+				currLineModeIndex = 0;
+			}
+
+			glutPostRedisplay();
+		}
+			break;
 		default:
 			break;
 		}
@@ -103,6 +136,7 @@ namespace Circle
 	{
 		std::cout << "Interaction:" << std::endl;
 		std::cout << "Press +/- to increase/decrease the number of vertices on the circle." << std::endl;
+		std::cout << "Press spacebar if you want switch between line modes\n";
 	}
 
 	int main(int argc, char** argv)
