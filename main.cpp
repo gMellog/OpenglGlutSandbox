@@ -1,8 +1,7 @@
 
-#include "Projects/Circle.h"
-
+#include "Projects/SentenceOfFonts.h"
 int main(int argc, char** argv)
 {
-	Circle::main(argc, argv);
+	SentenceOfFonts::main(argc, argv);
 	return 0;
 }

@@ -12,19 +12,42 @@
 namespace SentenceOfFonts
 {
 	std::vector<std::pair<void*, std::string>> fonts;
+	static std::vector<std::pair<int, int>> stippleModes;
+	
+	int currLineModeIndex = 0;
 	int fontIndex = 0;
+
+	bool isFontStroke()
+	{
+		return fonts[fontIndex].second.find("STROKE") != std::string::npos;
+	}
+
+	void initStippleModes()
+	{
+		stippleModes =
+		{
+			{0, 0xFFFF},
+			{1, 0x5555},
+			{1, 0x0101},
+			{1, 0x00FF},
+			{5, 0x5555}
+		};
+	}
 
 	void initFonts()
 	{
-		fonts.push_back({ GLUT_BITMAP_8_BY_13, "GLUT_BITMAP_8_BY_13" });
-		fonts.push_back({ GLUT_BITMAP_9_BY_15, "GLUT_BITMAP_9_BY_15" });
-		fonts.push_back({ GLUT_BITMAP_TIMES_ROMAN_10, "GLUT_BITMAP_TIMES_ROMAN_10" });
-		fonts.push_back({ GLUT_BITMAP_TIMES_ROMAN_24, "GLUT_BITMAP_TIMES_ROMAN_24" });
-		fonts.push_back({ GLUT_BITMAP_HELVETICA_10, "GLUT_BITMAP_HELVETICA_10" });
-		fonts.push_back({ GLUT_BITMAP_HELVETICA_12, "GLUT_BITMAP_HELVETICA_12" });
-		fonts.push_back({ GLUT_BITMAP_HELVETICA_18, "GLUT_BITMAP_HELVETICA_18" });
-		fonts.push_back({ GLUT_STROKE_ROMAN, "GLUT_STROKE_ROMAN" });
-		fonts.push_back({ GLUT_STROKE_MONO_ROMAN, "GLUT_STROKE_MONO_ROMAN" });
+		fonts =
+		{
+			{GLUT_BITMAP_8_BY_13, "GLUT_BITMAP_8_BY_13"},
+			{GLUT_BITMAP_9_BY_15, "GLUT_BITMAP_9_BY_15"},
+			{GLUT_BITMAP_TIMES_ROMAN_10, "GLUT_BITMAP_TIMES_ROMAN_10"},
+			{GLUT_BITMAP_TIMES_ROMAN_24, "GLUT_BITMAP_TIMES_ROMAN_24"},
+			{GLUT_BITMAP_HELVETICA_10, "GLUT_BITMAP_HELVETICA_10"},
+			{GLUT_BITMAP_HELVETICA_12, "GLUT_BITMAP_HELVETICA_12"},
+			{GLUT_BITMAP_HELVETICA_18, "GLUT_BITMAP_HELVETICA_18"},
+			{GLUT_STROKE_ROMAN, "GLUT_STROKE_ROMAN"},
+			{GLUT_STROKE_MONO_ROMAN, "GLUT_STROKE_MONO_ROMAN"}
+		};
 	}
 
 	void writeBitmapString(void* font, const std::string& str)
@@ -82,6 +105,9 @@ namespace SentenceOfFonts
 		}
 		else
 		{
+			glEnable(GL_LINE_STIPPLE);
+			const auto& lineMode = stippleModes[currLineModeIndex];
+			glLineStipple(lineMode.first, lineMode.second);
 			glColor3f(0.f, 0.f, 0.f);
 			glLineWidth(1.5);
 			glPushMatrix();
@@ -97,6 +123,7 @@ namespace SentenceOfFonts
 			glScalef(0.04, 0.04, 0.04);
 			writeStrokeString(GLUT_STROKE_ROMAN, downStr);
 			glPopMatrix();
+			glDisable(GL_LINE_STIPPLE);
 		}
 
 		glFlush();
@@ -105,6 +132,7 @@ namespace SentenceOfFonts
 	void setup(void)
 	{
 		initFonts();
+		initStippleModes();
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 	}
 
@@ -155,13 +183,55 @@ namespace SentenceOfFonts
 
 			break;
 		}
+
+		case GLUT_KEY_UP:
+
+			if (isFontStroke())
+			{
+				const auto lastIndex = stippleModes.size() - 1;
+				++currLineModeIndex;
+
+				if (currLineModeIndex > lastIndex)
+				{
+					currLineModeIndex = 0;
+				}
+
+				glutPostRedisplay();
+			}
+
+			break;
+		
+		case GLUT_KEY_DOWN:
+
+			if (isFontStroke())
+			{
+				--currLineModeIndex;
+				
+				if (currLineModeIndex < 0)
+				{
+					currLineModeIndex = 0;
+				}
+
+				glutPostRedisplay();
+			}
+
+			break;
+
 		default:
 			break;
 		}
 	}
 
+	void printInteraction()
+	{
+		std::cout << "Interaction:\n";
+		std::cout << "Press LEFT or RIGHT arrow keys to change the font\n";
+		std::cout << "Press UP or DOWN arrow keys if there stroke font to change stipple maneer\n";
+	}
+
 	int main(int argc, char** argv)
 	{
+		printInteraction();
 		glutInit(&argc, argv);
 
 		glutInitContextVersion(4, 3);
