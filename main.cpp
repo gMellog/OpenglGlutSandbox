@@ -1,8 +1,8 @@
 
-#include "SentenceOfFonts.h"
+#include "GlutMenuTest.h"
 
 int main(int argc, char** argv)
 {
-	SentenceOfFonts::main(argc, argv);
+	GlutMenuTest::main(argc, argv);
 	return 0;
 }
