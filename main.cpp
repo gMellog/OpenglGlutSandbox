@@ -1,8 +1,8 @@
 
-#include "Projects/MakeCircleWithTwoClicks.h"
+#include "SentenceOfFonts.h"
 
 int main(int argc, char** argv)
 {
-	MakeCircleWithTwoClicks::main(argc, argv);
+	SentenceOfFonts::main(argc, argv);
 	return 0;
 }
