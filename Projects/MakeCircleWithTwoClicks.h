@@ -224,8 +224,6 @@ namespace MakeCircleWithTwoClicks
 
 		float wheelOffset;
 
-
-
 		void eraseLastCircle()
 		{
 			circles.erase(std::end(circles) - 1);
