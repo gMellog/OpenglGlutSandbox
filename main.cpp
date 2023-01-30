@@ -1,8 +1,8 @@
 
-#include "Canvas.h"
+#include "ViewportsTest.h"
 
 int main(int argc, char** argv)
 {
-	Canvas::main(argc, argv);
+	ViewportsTest::main(argc, argv);
 	return 0;
 }
