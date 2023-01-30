@@ -1,8 +1,8 @@
 
-#include "MultipleWindows.h"
+#include "ThreeLeggedStool.h"
 
 int main(int argc, char** argv)
 {
-	MultipleWindows::main(argc, argv);
+	ThreeLeggedStool::main(argc, argv);
 	return 0;
 }
