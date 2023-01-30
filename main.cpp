@@ -1,8 +1,8 @@
 
-#include "ViewportsTest.h"
+#include "MultipleWindows.h"
 
 int main(int argc, char** argv)
 {
-	ViewportsTest::main(argc, argv);
+	MultipleWindows::main(argc, argv);
 	return 0;
 }
