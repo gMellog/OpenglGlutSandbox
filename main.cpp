@@ -1,8 +1,8 @@
 
-#include "ColoredDisc.h"
+#include "TorusSatellites.h"
 
 int main(int argc, char** argv)
 {
-	ColoredDisc::main(argc, argv);
+	TorusSatellites::main(argc, argv);
 	return 0;
 }
