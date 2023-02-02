@@ -434,6 +434,11 @@ namespace BouncingBall
 		for (const auto ch : str) glutBitmapCharacter(font, ch);
 	}
 
+	void glutStrokeStr(void* font, const std::string& str)
+	{
+		for (const auto ch : str) glutStrokeCharacter(font, ch);
+	}
+
 
 	int getSetWSize(const std::string& str)
 	{
@@ -456,18 +461,21 @@ namespace BouncingBall
 		glutBitmapStr(GLUT_BITMAP_TIMES_ROMAN_24, ss.str());
 	}
 
-	void drawParamsMode()
-	{
-		if (!isAnimate)
-		{
-
-		}
-	}
-
 	void drawSetParams()
 	{
  		if (!isAnimate && showSimulationParams)
 		{
+			glColor3f(1.f, 0.f, 0.f);
+			glLineWidth(2.8f);
+
+			glPushMatrix();
+			glTranslated(-8.0, 9.0, -15.0);
+			glScaled(0.0125, 0.0125, 0.0125);
+			glutStrokeStr(GLUT_STROKE_ROMAN, "SET PARAMS MODE");
+			glPopMatrix();
+
+			glLineWidth(1.f);
+
 			glColor3f(0.f, 0.f, 0.f);
 			
 			drawParam("vX: ", initialBallVelocity.X, {-7.5f, 0.7f, -15.f});
