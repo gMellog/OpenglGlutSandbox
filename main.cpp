@@ -1,8 +1,8 @@
 
-#include "TorusSatellites.h"
+#include "Projects/BouncingBall.h"
 
 int main(int argc, char** argv)
 {
-	TorusSatellites::main(argc, argv);
+	BouncingBall::main(argc, argv);
 	return 0;
 }
