@@ -1,8 +1,8 @@
 
-#include "Projects/BouncingBall.h"
+#include "FallingBallAndWater.h"
 
 int main(int argc, char** argv)
 {
-	BouncingBall::main(argc, argv);
+	FallingBallAndWater::main(argc, argv);
 	return 0;
 }
