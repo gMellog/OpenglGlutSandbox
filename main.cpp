@@ -1,8 +1,7 @@
 
-#include "BallRollingDown.h"
+#include "OpenglGlutSandbox/Projects/BallRollChildrenSlide.h"
 
 int main(int argc, char** argv)
 {
-	BallRollingDown::main(argc, argv);
-	return 0;
+	return BallRollChildrenSlide::main(argc, argv);
 }
