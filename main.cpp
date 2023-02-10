@@ -1,8 +1,8 @@
 
-#include "Clown.h"
+#include "BallRollingDown.h"
 
 int main(int argc, char** argv)
 {
-	Clown::main(argc, argv);
+	BallRollingDown::main(argc, argv);
 	return 0;
 }
