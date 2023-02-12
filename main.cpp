@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/SquareToLine.h"
+#include "OpenglGlutSandbox/Projects/SolarySystem.h"
 
 int main(int argc, char** argv)
 {
-	return SquareToLine::main(argc, argv);;
+	return SolarySystem::main(argc, argv);;
 }
