@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/BallBouncingUp.h"
+#include "OpenglGlutSandbox/Projects/SquareToLine.h"
 
 int main(int argc, char** argv)
 {
-	return BallBouncingUp::main(argc, argv);
+	return SquareToLine::main(argc, argv);;
 }
