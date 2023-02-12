@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/SolarySystem.h"
+#include "OpenglGlutSandbox/Projects/SpinningCube.h"
 
 int main(int argc, char** argv)
 {
-	return SolarySystem::main(argc, argv);;
+	return SpinningCube::main(argc, argv);;
 }
