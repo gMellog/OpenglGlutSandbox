@@ -140,10 +140,8 @@ namespace SpinningCube
 			:
 			transform{ pTransform },
 			size{5.f},
-			prevDir{},
 			currDir{},
 			angle{},
-			t{},
 			verticies{ fillVerticies() }
 		{
 		}
@@ -161,18 +159,7 @@ namespace SpinningCube
 		void setSpinDir(const Vector& newDir)
 		{
 			angle = 0.f;
-
-			if ((prevDir == ZeroVector) && (currDir == ZeroVector))
-			{
-				prevDir = currDir = newDir;
-				t = 1.f;
-			}
-			else
-			{
-				prevDir = currDir;
-				currDir = newDir;
-				t = 0.f;
-			}
+			currDir = newDir;
 		}
 
 		Transform getTransform() const noexcept
@@ -183,15 +170,11 @@ namespace SpinningCube
 	private:
 
 		Transform transform;
-		Vector prevDir;
 		Vector currDir;
 		float size;
 		float angle;
-		float t;
 
 		std::vector<Vector> verticies;
-
-		std::vector<Vector> cubeVerticies;
 
 		std::vector<Vector> fillVerticies()
 		{
@@ -324,7 +307,7 @@ namespace SpinningCube
 	void printInteraction(void)
 	{
 		std::cout << "Interaction:" << std::endl;
-		std::cout << "Press space to toggle between animation on and off.\n"
+		std::cout << "Press space to toggle between wire and solid mode.\n"
 			<< "Press r to start animation again\n";
 	}
 
