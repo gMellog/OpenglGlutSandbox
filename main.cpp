@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/SpinningCube.h"
+#include "OpenglGlutSandbox/Projects/AnimatedGarden.h"
 
 int main(int argc, char** argv)
 {
-	return SpinningCube::main(argc, argv);;
+	return AnimatedGarden::main(argc, argv);;
 }
