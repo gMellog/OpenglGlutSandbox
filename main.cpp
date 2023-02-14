@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/AnimatedGarden.h"
+#include "OpenglGlutSandbox/Projects/BallRollOnPoolTable.h"
 
 int main(int argc, char** argv)
 {
-	return AnimatedGarden::main(argc, argv);;
+	return BallRollOnPoolTable::main(argc, argv);;
 }
