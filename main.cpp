@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/BallRollOnPoolTable.h"
+#include "OpenglGlutSandbox/Projects/LookAtBalls.h"
 
 int main(int argc, char** argv)
 {
-	return BallRollOnPoolTable::main(argc, argv);;
+	return LookAtBalls::main(argc, argv);;
 }
