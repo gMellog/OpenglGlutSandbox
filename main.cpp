@@ -1,7 +1,7 @@
 
-#include "OpenglGlutSandbox/Projects/LookAtBalls.h"
+#include "OpenglGlutSandbox/Projects/FlyingCameraOnSphere.h"
 
 int main(int argc, char** argv)
 {
-	return LookAtBalls::main(argc, argv);;
+	return FlyingCameraOnSphere::main(argc, argv);;
 }
