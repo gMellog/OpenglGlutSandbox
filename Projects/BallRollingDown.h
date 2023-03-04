@@ -9,6 +9,7 @@
 #include <chrono>
 #include <map>
 #include <memory>
+#include <cmath>
 
 namespace BallRollingDown
 {
@@ -17,6 +18,8 @@ namespace BallRollingDown
 	static float g = 15.81f;
 	static float deltaTime;
 	static float angleZInclinedPlane;
+	static int height = 500;
+	static int width = 1000;
 	std::chrono::system_clock::time_point tp;
 
 	struct Vector
@@ -544,7 +547,7 @@ namespace BallRollingDown
 	std::unique_ptr<Ball> createBall()
 	{
 		return std::make_unique<Ball>( Vector{},
-			Transform{ { -20.0, 0.0, -22.0 },
+			Transform{ { -20.0, 0.0, -20.0 },
 			  {1.f, 1.f, 1.f},
 			  {
 				0.f, {0.f, 0.f, 1.f}
@@ -555,11 +558,47 @@ namespace BallRollingDown
 
 	void tick(float deltaTime)
 	{
-		glTranslated(0.f, -20.f, -15.f);
+		glPushMatrix();
+		glTranslated(-10.f, -20.f, -15.f);
 		glRotated(45., 1., 0., 0.);
 
 		for (auto& actor : actors)
 			actor->tick(deltaTime);
+		
+		glPopMatrix();
+	}
+
+	void setUpCamera()
+	{
+		gluLookAt(-30.0, 12.5, -10.0, -20.0, 0.0, -22.0, 1.0, 0.0, 0.0);
+	}
+
+	void setDownCamera()
+	{
+		gluLookAt(25.0, 2.0, -20.0, -20.0, 0.0, -22.0, -1.0, 0.0, 0.0);
+	}
+
+	void drawSeparateLine()
+	{
+		glViewport(0, 0, width, height);
+		
+		//those magic numbers are from glFrustum()
+		const std::vector<Vector> v{
+			{0.f, 5.f, -5.f},
+			{0.f, -5.f, -5.f}
+		};
+
+		glLoadIdentity();
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, v.data());
+
+		glColor3f(1.f, 0.f, 0.f);
+		glLineWidth(2.0);
+		
+		glDrawArrays(GL_LINES, 0, v.size());
+		glDisableClientState(GL_VERTEX_ARRAY);
+		
+		glLineWidth(1.0);
 	}
 
 	void drawScene(void)
@@ -573,7 +612,20 @@ namespace BallRollingDown
 		deltaTime = float(d.count()) * milliseconds::period::num / milliseconds::period::den;
 		tp = system_clock::now();
 
+		glPushMatrix();
+		glViewport(0, 0, width / 2, height);
+		setUpCamera();	
 		tick(deltaTime);
+		glPopMatrix();
+
+		drawSeparateLine();
+
+		glPushMatrix();
+		glViewport(width / 2, 0, width / 2, height);
+		setDownCamera();	
+		tick(deltaTime);
+		glPopMatrix();
+
 		glutSwapBuffers();
 	}
 
@@ -654,6 +706,8 @@ namespace BallRollingDown
 	void resize(int w, int h)
 	{
 		glViewport(0, 0, w, h);
+		width = w;
+		height = h;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
@@ -743,7 +797,7 @@ namespace BallRollingDown
 		glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 
 		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-		glutInitWindowSize(500, 500);
+		glutInitWindowSize(width, height);
 		glutInitWindowPosition(100, 100);
 		glutCreateWindow("BallRollingDown");
 		glutDisplayFunc(drawScene);
