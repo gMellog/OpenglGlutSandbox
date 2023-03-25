@@ -1,7 +1,7 @@
 
-#include "BallRollingDown.h"
+#include "TriangulateMask.h"
 
 int main(int argc, char** argv)
 {
-	return BallRollingDown::main(argc, argv);;
+	return TriangulateMask::main(argc, argv);;
 }
