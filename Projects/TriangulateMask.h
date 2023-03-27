@@ -173,7 +173,6 @@ namespace TriangulateMask
 			};
 
 			const auto vertices = getFilledTriangleFanVertices(fillVertices);
-			
 			const auto first = getFilledTriangleFanFirst(fillVertices);
 			const auto count = getFilledTriangleFanCount(fillVertices);
 			
