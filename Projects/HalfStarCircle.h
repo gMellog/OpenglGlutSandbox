@@ -102,6 +102,7 @@ namespace HalfStarCircle
 			drawOutlineCircles();
 			drawStarParts();
 			drawOutlineParts();
+			
 		}
 
 		void toggleWireframeMode()
@@ -260,15 +261,45 @@ namespace HalfStarCircle
 			return r;
 		}
 
+		std::vector<Vector> connectCircles(const std::vector<Vector>& lhs, const std::vector<Vector>& rhs) const
+		{
+			std::vector<Vector> r;
+
+			r.reserve(lhs.size() + rhs.size());
+
+			const auto N = std::max(lhs.size(), rhs.size());
+
+			for(int i{}; i < N; ++i)
+			{
+				if(i < (lhs.size() - 1))
+					r.push_back(lhs[i]);
+				
+				if(i < (rhs.size() - 1))
+					r.push_back(rhs[i]);
+			}
+
+			if(!lhs.empty())
+				r.push_back(lhs[0]);
+			
+			if(!rhs.empty())
+				r.push_back(rhs[0]);
+
+			return r;
+		}
+
 		void drawOutlineCircles() const
 		{
-			const auto innerN = 25;
+			const auto innerN = 40;
 			const auto outerN = 40;
 
 			std::vector<std::vector<Vector>> circles{
-				getCirclePoints(innerR, innerN),
-				getCirclePoints(outerR, outerN)
+				connectCircles(getCirclePoints(innerR - 0.4f, innerN), getCirclePoints(innerR, innerN)),
+				connectCircles(getCirclePoints(outerR - 0.1f, outerN), getCirclePoints(outerR + 0.5f, outerN))
 			};
+
+			for(auto& c : circles)
+				for(auto& v : c)
+					v.Z = 0.5f;
 
 			const auto vertices = getFilledVertices(circles);
 			const auto first = getFilledFirst(circles);
@@ -276,7 +307,7 @@ namespace HalfStarCircle
 			
 			glColor3f(0.f, 0.f, 0.f);
 			glVertexPointer(3, GL_FLOAT, 0.f, vertices.data());
-			glMultiDrawArrays(GL_LINE_STRIP, first.data(), count.data(), circles.size());
+			glMultiDrawArrays(GL_TRIANGLE_STRIP, first.data(), count.data(), circles.size());
 		}
 
 		std::vector<Vector> getCirclePoints(float R, int N) const
@@ -385,7 +416,7 @@ namespace HalfStarCircle
 
 	void drawScene(void)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		halfStarCircle.draw();
 
@@ -396,6 +427,7 @@ namespace HalfStarCircle
 	{
 		glClearColor(1.0, 1.0, 1.0, 0.0);
 		halfStarCircle.init();
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void resize(int w, int h)
@@ -432,7 +464,7 @@ namespace HalfStarCircle
 		glutInitContextVersion(4, 3);
 		glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 
-		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
+		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 		
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);

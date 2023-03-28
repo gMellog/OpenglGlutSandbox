@@ -1,7 +1,7 @@
 
-#include "HalfStarCircle.h"
+#include "Car3D.h"
 
 int main(int argc, char** argv)
 {
-	return HalfStarCircle::main(argc, argv);;
+	return Car3D::main(argc, argv);;
 }
