@@ -434,7 +434,6 @@ namespace Car3D
 			glLineWidth(1.f);
 			glPopMatrix();
 
-			//glutBitmapStr(GLUT_BITMAP_HELVETICA_18, "B382AM197");
 			glColor3f(1.f, 1.f, 1.f);
 			glDrawElements(GL_TRIANGLE_STRIP, indecies.size(), GL_UNSIGNED_INT, (const void**)(indecies.data()));
 		}

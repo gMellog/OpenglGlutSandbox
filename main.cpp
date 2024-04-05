@@ -1,7 +1,7 @@
 
-#include "Car3D.h"
+#include "TestCohenSazerland.h"
 
 int main(int argc, char** argv)
 {
-	return Car3D::main(argc, argv);;
+	return TestCohenSazerland::main(argc, argv);
 }
