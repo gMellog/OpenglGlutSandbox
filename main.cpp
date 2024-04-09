@@ -1,7 +1,7 @@
 
-#include "TestCohenSazerland.h"
+#include "TurtleCanvas.h"
 
 int main(int argc, char** argv)
 {
-	return TestCohenSazerland::main(argc, argv);
+	return TurtleCanvas::main(argc, argv);
 }
