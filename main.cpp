@@ -1,7 +1,7 @@
 
-#include "TurtleCanvas.h"
+#include "GoldenRectanglesRegression.h"
 
 int main(int argc, char** argv)
 {
-	return TurtleCanvas::main(argc, argv);
+	return GoldenRectanglesRegression::main(argc, argv);
 }
